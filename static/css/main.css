@@ -26,3 +26,11 @@ h1, h2, h3, h4, h5, h6{
     line-height: 30px;
     color: #555555;
 }
+#group-selector-ef {
+    width: 85%;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    height: 30px;
+    line-height: 30px;
+    color: #555555;
+}
