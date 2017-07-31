@@ -15,9 +15,11 @@ urlpatterns = patterns('',
 
     url(r'^students/(?P<sid>\d+)/delete/$', 'students.views.students_delete', name='students_delete'),
 
+    url(r'^journal/$', 'students.views.journal_list', name='journal'),
+
     # Groups urls
 
-    url(r'^groups/$', 'students.views.groups_list', name='groups'),
+    url(r'^groups/$', 'students.views.groups_list', name='groups_list'),
 
     url(r'^groups/add/$', 'students.views.groups_add', name='groups_add'),
 
