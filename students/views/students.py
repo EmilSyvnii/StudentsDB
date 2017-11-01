@@ -3,32 +3,34 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from ..models import Student
 
 # Views for Students.
 
 def students_list(request):
-    students = (
-        {'id': 1,
-         'first_name': u'Даніель',
-         'last_name': u'Аггер',
-         'ticket': 5,
-         'image': 'img/Agger.jpg'},
-        {'id': 2,
-         'first_name': u'Садіо',
-         'last_name': u'Мане',
-         'ticket': 19,
-         'image': 'img/Sadio.jpeg'},
-        {'id': 3,
-         'first_name': u'Фернандо',
-         'last_name': u'Торрес',
-         'ticket': 9,
-         'image': 'img/Nando.jpg'},
-        {'id': 4,
-         'first_name': u'Джордан',
-         'last_name': u'Хендерсон',
-         'ticket': 14,
-         'image': 'img/Hendo.jpg'}
-    )
+    students = Student.objects.all()
+
+    #ordering
+    order_by = request.GET.get('order_by', '')
+    if order_by in ('last_name', 'first_name', 'ticket'):
+        students = students.order_by(order_by)
+        if request.GET.get('reverse', '') == '1':
+            students = students.reverse()
+    else:
+        students = students.order_by('last_name')
+
+    #pagination
+    paginator = Paginator(students, 3)
+    page = request.GET.get('page')
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+
     return render(request, 'students/students_list.html', {'students': students})
 
 def students_add(request):

@@ -22,7 +22,7 @@ class Student(models.Model):
     )
     middle_name = models.CharField(
         max_length=256,
-        blank = False,
+        blank = True,
         verbose_name=u'По батькові',
         default=''
     )
