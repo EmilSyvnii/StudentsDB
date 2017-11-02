@@ -14,7 +14,7 @@ def students_list(request):
 
     #ordering
     order_by = request.GET.get('order_by', '')
-    if order_by in ('last_name', 'first_name', 'ticket'):
+    if order_by in ('last_name', 'first_name', 'ticket', 'student_group'):
         students = students.order_by(order_by)
         if request.GET.get('reverse', '') == '1':
             students = students.reverse()

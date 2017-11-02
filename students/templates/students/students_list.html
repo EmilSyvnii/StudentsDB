@@ -28,6 +28,12 @@
                                 {% elif order_by == 'first_name' and reverse == '1'%}&darr;
                                 {% endif %}</a>
                             </th>
+                            <!--
+                            <th><a href="{% url 'home' %}?order_by=student_group{% if order_by == 'student_group' and reverse != '1' %}&amp;reverse=1{% endif %}">Група
+                                {% if order_by == 'student_group' and reverse != '1' %}&uarr;
+                                {% elif order_by == 'student_group' and reverse == '1'%}&darr;
+                                {% endif %}</a>
+                            </th> -->
                             <th><a href="{% url 'home' %}?order_by=ticket{% if order_by == 'ticket' and reverse != '1' %}&amp;reverse=1{% endif %}">№ Білету
                                 {% if order_by == 'ticket' and reverse != '1' %}&uarr;
                                 {% elif order_by == 'ticket' and reverse == '1'%}&darr;
