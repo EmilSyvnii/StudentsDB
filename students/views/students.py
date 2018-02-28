@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from datetime import datetime
+from django.contrib import messages
 
 from ..models import Student, Group
 
@@ -92,16 +93,18 @@ def students_add(request):
                 student = Student(**data)
                 student.save()
                 # redirection to students list
-                return HttpResponseRedirect(u'%s?status_message=Студента %s %s успішно додано.' %
-                                            (reverse('home'), data['first_name'], data['last_name']))
+                messages.success(request, ("Студента %s %s успішно додано" % (data['first_name'], data['last_name'])))
+                return HttpResponseRedirect(reverse('home'))
             else:
                 # render form with errors and previous user input
+                messages.warning(request, "Поля заповнено некоректно")
                 return render(request, 'students/students_add.html',
                               {'groups': Group.objects.all().order_by('title'),
                                'errors': errors})
 
         elif request.POST.get('cancel_button') is not None:
-            return HttpResponseRedirect(u'%s?status_message=Додавання студента скасовано' % reverse('home'))
+            messages.warning(request, "Додавання студента скасовано")
+            return HttpResponseRedirect(reverse('home'))
 
     else:
         return render(request, 'students/students_add.html',
