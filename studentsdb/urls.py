@@ -19,6 +19,8 @@ urlpatterns = patterns('',
 
     url(r'^journal/$', 'students.views.journal.journal_list', name='journal'),
 
+    url(r'^contact-admin/$', 'students.views.contact_admin.contact_admin', name='contact_admin'),
+
     # Groups urls
 
     url(r'^groups/$', 'students.views.groups.groups_list', name='groups'),
