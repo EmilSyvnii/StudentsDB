@@ -7,6 +7,12 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from datetime import datetime
 from django.contrib import messages
+from django.views.generic import UpdateView, DeleteView
+from django.forms import ModelForm
+
+from crispy_forms.layout import Submit
+from crispy_forms.helper import FormHelper
+from crispy_forms.bootstrap import FormActions
 
 from ..models import Student, Group
 
@@ -103,7 +109,7 @@ def students_add(request):
                                'errors': errors})
 
         elif request.POST.get('cancel_button') is not None:
-            messages.warning(request, "Додавання студента скасовано")
+            messages.success(request, "Додавання студента скасовано")
             return HttpResponseRedirect(reverse('home'))
 
     else:
@@ -112,8 +118,53 @@ def students_add(request):
 
     return render(request, 'students/students_add.html', {'groups': Group.objects.all().order_by('title')})
 
-def students_edit(request, sid):
-    return HttpResponse('<h1>Edit Student %s </h1>' % sid)
 
-def students_delete(request, sid):
-    return HttpResponse('<h1>Delete Student %s </h1>' % sid)
+class StudentUpdateForm(ModelForm):
+    class Meta:
+        model = Student
+
+    def __init__(self, *args, **kwargs):
+        super(StudentUpdateForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_method = 'POST'
+        self.helper.form_action = reverse('students_edit', kwargs={'pk': kwargs['instance'].id})
+
+        self.helper.help_text_inline = True
+        self.helper.html5_required = True
+        self.helper.label_class = 'col-sm-2 control-label'
+        self.helper.field_class = 'col-sm-10'
+
+        # form buttons
+        self.helper.layout[-1] = FormActions(
+            Submit('add_button', 'Зберегти', css_class="btn btn-primary"),
+            Submit('cancel_button', 'Скасувати', css_class="btn btn-link"),
+        )
+
+
+class StudentUpdateView(UpdateView):
+    model = Student
+    template_name = 'students/students_edit.html'
+    form_class = StudentUpdateForm
+
+    def get_success_url(self):
+        messages.success(self.request, "Зміни збережено")
+        return reverse('home')
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('cancel_button'):
+            messages.warning(request, "Зміни скасовано")
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            return super(StudentUpdateView, self).post(request, *args, **kwargs)
+
+
+class StudentDeleteView(DeleteView):
+    model = Student
+    template_name = 'students/students_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request, "Студента успішно видалено")
+        return reverse('home')
