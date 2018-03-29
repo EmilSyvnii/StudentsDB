@@ -15,6 +15,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FormActions
 
 from ..models import Student, Group
+from ..util import paginate
 
 # Views for Students.
 
@@ -31,6 +32,7 @@ def students_list(request):
         students = students.order_by('last_name')
 
     #pagination
+
     paginator = Paginator(students, 3)
     page = request.GET.get('page')
     try:
