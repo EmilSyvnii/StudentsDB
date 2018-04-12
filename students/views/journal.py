@@ -6,6 +6,7 @@ from datetime import datetime, date
 from django.core.urlresolvers import reverse
 from calendar import monthrange, weekday, day_abbr
 from dateutil.relativedelta import relativedelta
+from django.http import JsonResponse
 
 from django.views.generic import TemplateView
 
@@ -73,3 +74,21 @@ class JournalView(TemplateView):
         context = paginate(students, 10, self.request, context, var_name='students')
 
         return context
+
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+
+        current_date = datetime.strptime((data['date']), '%Y-%m-%d').date()
+        month = date(current_date.year, current_date.month, 1)
+        present = data['present'] and True or False
+        student = Student.objects.get(pk=data['pk'])            # get student's object from the database with ID
+
+        # get or create journal obj
+        journal = MonthJournal.objects.get_or_create(student=student, date=month)[0]
+
+        # set new presence in journal for given stud and save the results
+        setattr(journal, 'present_day%d' % current_date.day, present)
+        journal.save()
+
+        # return success status
+        return JsonResponse({'status': 'success'})
