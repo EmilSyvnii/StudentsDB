@@ -44,7 +44,10 @@ class JournalView(TemplateView):
             'verbose': day_abbr[weekday(myear, mmonth, d)][:2]}
             for d in range(1, number_of_days+1)]
 
-        queryset = Student.objects.order_by('last_name')
+        if kwargs.get('pk'):
+            queryset = Student.objects.filter(pk=kwargs['pk'])
+        else:
+            queryset = Student.objects.order_by('last_name')
         
         # set url for AJAX request
         update_url = reverse('journal')

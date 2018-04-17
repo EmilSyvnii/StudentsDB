@@ -15,12 +15,16 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FormActions
 
 from ..models import Student, Group
-from ..util import paginate
+from ..util import paginate, get_current_group
 
 # Views for Students.
 
 def students_list(request):
-    students = Student.objects.all()
+    current_group = get_current_group(request)
+    if current_group:
+        students = Student.objects.filter(student_group=current_group)
+    else:
+        students = Student.objects.all()
 
     #ordering
     order_by = request.GET.get('order_by', '')
