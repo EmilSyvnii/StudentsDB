@@ -51,8 +51,12 @@
                             {% else %}
                                 <td><img height="30"  width="30" src="{% static 'img/default_pic.jpg' %}" class="img-circle"></td>
                             {% endif %}
-                            <td><a title="Редагувати" href="{% url 'students_edit' student.id %}">{{ student.last_name }}</a></td>
-                            <td><a title="Редагувати" href="{% url 'students_edit' student.id %}">{{ student.first_name }}</a></td>
+                            <td><a title="Редагувати"
+                                   href="{% url 'students_edit' student.id %}" class="student-edit-form-link">
+                                {{ student.last_name }}</a></td>
+                            <td><a title="Редагувати"
+                                   href="{% url 'students_edit' student.id %}" class="student-edit-form-link">
+                                {{ student.first_name }}</a></td>
                             <td>{{ student.student_group }}</td>
                             <td>{{ student.ticket }}</td>
                             <td>
@@ -63,13 +67,17 @@
                                     </button>
                                     <ul class="dropdown-menu" role="menu">
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{% url 'students_edit' student.id %}">Редагувати</a>
+                                            <a role="menuitem" tabindex="-1"
+                                               href="{% url 'students_edit' student.id %}"
+                                               class="student-edit-form-link">Редагувати</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{% url 'journal' student.id %}">Відвідування</a>
+                                            <a role="menuitem" tabindex="-1"
+                                               href="{% url 'journal' student.id %}">Відвідування</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{% url 'students_delete' student.id %}">Видалити</a>
+                                            <a role="menuitem" tabindex="-1"
+                                               href="{% url 'students_delete' student.id %}">Видалити</a>
                                         </li>
                                     </ul>
                                 </div>
